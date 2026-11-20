@@ -334,4 +334,4 @@ class Data_Analyzer():
 if __name__ == "__main__":
     obj = Data_Analyzer()
     obj.start_program()
- 
+    
