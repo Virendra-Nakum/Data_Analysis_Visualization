@@ -2,11 +2,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-
 class Data_Analyzer():
 
     def __init__(self):
         self.data = None
+        self.graph = None
 
     def load_data(self):
         try:
@@ -16,8 +16,7 @@ class Data_Analyzer():
             return self.data
         except :
             print("Invalid File Name:")
-            return
-
+ 
     def explore_data(self) :
 
         if self.data is None:
@@ -33,6 +32,7 @@ class Data_Analyzer():
         print("3. Display Column Names")
         print("4. Display Data Types")
         print("5. Display Basic Information")
+        print("6. Dataset Shape")
 
         try:
             choice = int(input("Enter Your Choice: "))
@@ -44,13 +44,16 @@ class Data_Analyzer():
                 print(self.data.tail())
 
             elif choice == 3 :
-                print(self.data.columns)
+                print(self.data.columns.tolist())
 
             elif choice == 4 :
                 print(self.data.dtypes)
 
             elif choice == 5 :
-                print(self.data.info())
+                self.data.info()
+
+            elif choice == 6 :
+                print("Shape:", self.data.shape)
 
             else :
                 print("Enter A Valid Choice !")
@@ -64,11 +67,11 @@ class Data_Analyzer():
             return
 
         print("=== DataFrame Operations ===")
-        print("1. Sum of Sales")
-        print("2. Top 5 Products with Highest Sales")
-        print("3. Top 5 Products with Lowest Sales")
+        print("1. Total Sales")
+        print("2. Top 5 Sales")
+        print("3. Lowest 5 Sales")
         print("4. Region with Highest Sales")
-        print("5. Total Quantity Sold by Each Product")
+        print("5. Total Quantity Product")
 
         try:
             choice = int(input("Enter Your Choice: "))
@@ -92,7 +95,7 @@ class Data_Analyzer():
             else:
                 print("Enter a Valid Choice!")
         except :
-            print("Something Went Wrong !")
+            print("Please Enter a Valid Number!")
 
     def missing_value(self):
             
@@ -110,13 +113,12 @@ class Data_Analyzer():
             choice = int(input("Enter Your Choice: "))
 
             if choice == 1 :
-                print('=== Before ===')
-                value = self.data.isnull().sum()
-                print(value)
+                print(self.data.isnull().sum())
 
             elif choice == 2 :
                 self.data.fillna(self.data.mean(numeric_only=True))
                 print(self.data.isnull().sum())
+                print("Missing Values Filled Successfully!")
 
             elif choice == 3 :
                 print('=== Before ===')
@@ -136,7 +138,7 @@ class Data_Analyzer():
                 print("Enter A Valide Choice !")
 
         except :
-            print("Somethig Went Wrong !")
+            print("Please Enter a Valid Number!")
  
     def statistics_data(self):
         if self.data is None:
@@ -157,22 +159,27 @@ class Data_Analyzer():
 
         try:
             choice = int(input("Enter Your Choice: "))
-        except ValueError:
-            print("Enter a Valid Choice!")
-            return
+ 
+            if choice == 1:
+                print("Minimum:", self.data.min(numeric_only=True))
 
-        if choice == 1:
-            print("Minimum:", self.data.min(numeric_only=True))
-        elif choice == 2:
-            print("Maximum:", self.data.max(numeric_only=True))
-        elif choice == 3:
-            print("Average:", self.data.mean(numeric_only=True))
-        elif choice == 4:
-            print("Median:", self.data.median(numeric_only=True))
-        elif choice == 5:
-            print("Standard Deviation:", self.data.std(numeric_only=True))
-        else:
-            print("Enter a Valid Choice!")
+            elif choice == 2:
+                print("Maximum:", self.data.max(numeric_only=True))
+
+            elif choice == 3:
+                print("Average:", self.data.mean(numeric_only=True))
+
+            elif choice == 4:
+                print("Median:", self.data.median(numeric_only=True))
+
+            elif choice == 5:
+                print("Standard Deviation:", self.data.std(numeric_only=True))
+
+            else:
+                print("Enter a Valid Choice!")
+
+        except :
+            print("Please Enter a Valid Number!")
 
     def data_visualization(self):
         print("\n========== DATA VISUALIZATION ==========")
@@ -252,8 +259,9 @@ class Data_Analyzer():
             plt.show() 
         except:
                 print("Unable to Create Plot:")
+
     def save_visualization(self):
-        if not hasattr(self, "fig") or self.fig is None:
+        if self.fig is None:
             print("Please Generate a Graph First!")
             return
 
@@ -264,12 +272,12 @@ class Data_Analyzer():
             return
 
         try:
-            self.fig.savefig(f"plot/{file_name}.png", dpi=300, bbox_inches="tight")
-            print(f"Graph Saved Successfully: plot/{file_name}.png")
+            path = "plot/" + file_name + ".png"
+            self.fig.savefig(path, dpi=300, bbox_inches="tight")
+            print("Graph Saved Successfully:", path)
 
         except :
             print("Unable to Save Graph:")
- 
  
     def main_menu(self):
         print()
@@ -282,48 +290,48 @@ class Data_Analyzer():
         print("6. Data Visualization")
         print("7. Save Visualization")
         print("8. Exit")
-        print("=" * 70)
+        print("=" * 65)
 
-    def start_Programe(self):
+    def start_program(self):
         while True:
             self.main_menu()
 
             try:
                 choice = int(input("Enter Your Choice: "))
+                print()
+
+                if choice == 1:
+                    self.load_data()
+
+                elif choice == 2:
+                    self.explore_data()
+
+                elif choice == 3:
+                    self.performance_data()
+
+                elif choice == 4:
+                    self.missing_value()
+
+                elif choice == 5:
+                    self.statistics_data()
+
+                elif choice == 6:
+                    self.data_visualization()
+
+                elif choice == 7:
+                    self.save_visualization()
+
+                elif choice == 8:
+                    print("Exiting the Program. Goodbye!")
+                    
+                    break
+                else:
+                    print("Invalid Choice!")
+
             except :
                 print("Enter a Valid Choice!")
-                continue
-
-            print()
-
-            if choice == 1:
-                self.load_data()
-
-            elif choice == 2:
-                self.explore_data()
-
-            elif choice == 3:
-                self.performance_data()b
-
-            elif choice == 4:
-                self.missing_value()
-
-            elif choice == 5:
-                self.statistics_data()
-
-            elif choice == 6:
-                self.data_visualization()
-
-            elif choice == 7:
-                self.save_visualization()
-
-            elif choice == 8:
-                print("Exiting the Program. Goodbye!")
-                
-                break
-            else:
-                print("Invalid Choice!")
-
-
-obj = Data_Analyzer()
-obj.start_Programe()
+ 
+if __name__ == "__main__":
+    obj = Data_Analyzer()
+    obj.start_program()
+ 
